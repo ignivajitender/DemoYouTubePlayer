@@ -10,7 +10,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -19,20 +18,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import com.google.android.youtube.player.YouTubePlayer;
 import com.igniva.youtubeplayer.R;
-import com.igniva.youtubeplayer.model.DataYoutubePojo;
 import com.igniva.youtubeplayer.db.DatabaseHandler;
-import com.igniva.youtubeplayer.ui.activities.MainActivity;
+import com.igniva.youtubeplayer.model.DataYoutubePojo;
+import com.igniva.youtubeplayer.ui.activities.YouTubePlayerActivity;
 import com.igniva.youtubeplayer.ui.fragments.CategoriesFragment;
 import com.igniva.youtubeplayer.utils.OrientationEnum;
 import com.igniva.youtubeplayer.utils.QualityEnum;
-import com.igniva.youtubeplayer.ui.activities.YouTubePlayerActivity;
-import com.igniva.youtubeplayer.utils.UtilsUI;
 import com.igniva.youtubeplayer.utils.YouTubeThumbnail;
 import com.squareup.picasso.Picasso;
 
@@ -48,16 +43,11 @@ import yt.sdk.access.YTSDK;
 public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.ViewHolder> {
 
     public static ArrayList<String> mListCategories = new ArrayList<>();
-    ;
+
     ArrayList<String> mListNames = new ArrayList<>();
-    ;
     ArrayList<String> mListDuration = new ArrayList<>();
-    ;
     ArrayList<String> mListRating = new ArrayList<>();
-    ;
     ArrayList<String> mListFavourite = new ArrayList<>();
-    ;
-    ;
 
     YTSDK sdk = null;
 
@@ -83,9 +73,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         } else {
             CategoriesFragment.mRvCategories.setVisibility(View.GONE);
         }
-
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-
     }
 
 
@@ -105,8 +93,6 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             mRatingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
             mIvFavourite = (ImageView) itemView.findViewById(R.id.iv_star_favourite);
             mIvShareIcon = (ImageView) itemView.findViewById(R.id.iv_share_icon);
-
-
         }
     }
 
@@ -120,15 +106,10 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-
         try {
-
             final DatabaseHandler db = new DatabaseHandler(mContext);
-
             LayerDrawable stars = (LayerDrawable) holder.mRatingBar.getProgressDrawable();
-
             stars.getDrawable(2).setColorFilter(Color.parseColor("#D32F2F"), PorterDuff.Mode.SRC_ATOP);
-
             holder.mRatingBar.setRating(Float.parseFloat(mListRating.get(position).toString()));
 
             Picasso.with(mContext)
@@ -137,8 +118,8 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                     .into(holder.mTvCategoryImg);
 
             holder.mTvCategoryName.setText(mListNames.get(position));
-
             holder.mTvCategoryDuration.setText(mListDuration.get(position));
+
 
             if (mListFavourite.get(position).equals("0")) {
                 holder.mIvFavourite.setImageResource(R.drawable.star_grey);
@@ -146,13 +127,10 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                 holder.mIvFavourite.setImageResource(R.drawable.star_golden);
             }
 
-
             holder.mIvShareIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     String link = "https://www.youtube.com/watch?v=" + mListCategories.get(position);
-
                     Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
                     sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "");
@@ -165,8 +143,6 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             holder.mIvFavourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
                     if (mListFavourite.get(position).equals("0")) {
                         holder.mIvFavourite.setImageResource(R.drawable.star_golden);
                         //                        Toast.makeText(mContext, "clicklistener", Toast.LENGTH_SHORT).show();
@@ -190,7 +166,6 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             holder.mCvMain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     Intent intent = new Intent(mContext, YouTubePlayerActivity.class);
                     intent.putExtra("VideoId", mListCategories.get(position));
                     intent.putExtra("player_style", YouTubePlayer.PlayerStyle.DEFAULT);
@@ -215,7 +190,6 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
 
     private void clear() {
-
         mListCategories.clear();
         mListNames.clear();
         mListDuration.clear();
@@ -238,7 +212,6 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         final DatabaseHandler db = new DatabaseHandler(mContext);
         contacts = db.getAllContacts();
 
-
         for (DataYoutubePojo cn : contacts) {
             String log = "video_Id: " + cn.getVideo_no() + " , Video_Title: " + cn.getVideo_title() + " Video_id" + cn.getVideo_id() + "Video_channel" + cn.getVideo_channel() +
                     " ,Duration: " + cn.getVideo_duration() + " Rating: " + cn.getVideo_rating() + " Thumb: " + cn.getVideo_thumb() + " Playlist: " + cn.getVideo_playlist() +
@@ -250,14 +223,9 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             mListRating.add("" + cn.getVideo_rating());
             mListFavourite.add(cn.getVideo_favourite());
 
-
             // Writing Contacts to log
             Log.e("Name: ", log);
-
         }
-
-
     }
-
 }
 

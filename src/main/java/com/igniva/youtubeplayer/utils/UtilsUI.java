@@ -120,6 +120,8 @@ public class UtilsUI {
 
                 new DividerDrawerItem(),
 
+
+
                 new SecondaryDrawerItem().withName("Settings").withIcon(R.drawable.ic_settings_black_24dp).withSelectable(false).withIdentifier(4),
 
                 new SecondaryDrawerItem().withName("Rate Us").withIcon(R.drawable.top_rated).withSelectable(false).withIdentifier(5),
